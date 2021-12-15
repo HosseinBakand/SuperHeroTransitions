@@ -59,7 +59,7 @@ fun SharedElement(
 }
 
 @Composable
-fun SharedElementsRoot(children: @Composable () -> Unit, from: MutableState<Boolean>) {
+fun SharedElementsRoot(state: MutableState<SharedElementType>, children: @Composable () -> Unit) {
     val rootState = remember { SharedElementsRootState() }
 
     Box(modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
@@ -68,15 +68,15 @@ fun SharedElementsRoot(children: @Composable () -> Unit, from: MutableState<Bool
         CompositionLocalProvider(SharedElementsRootStateAmbient provides rootState) {
             children()
         }
-        SharedElementTransitionsOverlay(rootState, from)
+        SharedElementTransitionsOverlay(rootState, state)
     }
 }
 
 @Composable
-private fun SharedElementTransitionsOverlay(rootState: SharedElementsRootState, from: MutableState<Boolean>) {
+private fun SharedElementTransitionsOverlay(rootState: SharedElementsRootState, state: MutableState<SharedElementType>) {
     val label = "Hero"
 
-    val transitionState = updateTransition(targetState = if (from.value) InProgress.State.START else InProgress.State.END, label = label)
+    val transitionState = updateTransition(targetState = if (state.value == SharedElementType.FROM) InProgress.State.START else InProgress.State.END, label = label)
 
 
 
