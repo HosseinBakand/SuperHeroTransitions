@@ -19,8 +19,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -33,6 +35,7 @@ import com.hb.superherotransition.ui.theme.SuperHeroTransitionTheme
 
 //import com.hb.superhero.SharedElementType
 //import com.hb.superhero.SharedElementsRoot
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +53,21 @@ class MainActivity : ComponentActivity() {
             val from = remember {
                 mutableStateOf(SharedElementType.FROM)
             }
+            var screen: User? by remember {
+                mutableStateOf(null)
+            }
             MaterialTheme {
                 SharedElementsRoot(from) {
-                    when (val selectedUser = viewModel.selectedUser) {
-                        null -> UsersListScreen()
-                        else -> UserDetailsScreen(selectedUser)
+                    if (screen == null) {
+                        UsersListScreen(){
+                            screen = it
+                        }
+                    } else {
+                        UserDetailsScreen(screen!!){
+                            screen = null
+                        }
                     }
+
                 }
             }
         }
@@ -79,13 +91,13 @@ fun GreetingPreview() {
 }
 
 //@Model
-class ViewModel(var selectedUser: User? = null)
-
-val viewModel = ViewModel()
+//class ViewModel(var selectedUser: User? = null)
+//
+//val viewModel = ViewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsersListScreen() {
+fun UsersListScreen(onClickItem:(User)->Unit) {
     LazyColumn() {
         items(users) { user ->
             ListItem(
@@ -104,18 +116,18 @@ fun UsersListScreen() {
                         Text(text = user.name)
                     }
                 },
-                modifier = Modifier.clickable { viewModel.selectedUser = user },
+                modifier = Modifier.clickable { onClickItem(user) },
             )
         }
     }
 }
 
 @Composable
-fun UserDetailsScreen(user: User) {
+fun UserDetailsScreen(user: User,onClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
         Box(
             modifier = Modifier
-                .clickable { viewModel.selectedUser = null }
+                .clickable { onClick() }
                 .size(200.dp)
 
         ) {
