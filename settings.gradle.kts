@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SuperHeroTransition"
 include(":app")
- 
+include(":superhero")
