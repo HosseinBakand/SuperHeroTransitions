@@ -14,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.hb.superherotransition.ui.theme.SuperHeroTransitionTheme
-import com.mobnetic.compose.sharedelement.SharedElementType
-import com.mobnetic.compose.sharedelement.SharedElementsRoot
+//import com.hb.superhero.SharedElementType
+//import com.hb.superhero.SharedElementsRoot
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,14 +30,14 @@ class MainActivity : ComponentActivity() {
                     Greeting("Android")
                 }
             }
-            val from = remember {
-                mutableStateOf(SharedElementType.FROM)
-            }
-            MaterialTheme {
-                SharedElementsRoot(from) {
-
-                }
-            }
+//            val from = remember {
+//                mutableStateOf(SharedElementType.FROM)
+//            }
+//            MaterialTheme {
+//                SharedElementsRoot(from) {
+//
+//                }
+//            }
         }
     }
 }
