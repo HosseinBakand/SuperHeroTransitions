@@ -112,9 +112,9 @@ fun UsersListScreen(onClickItem:(User)->Unit) {
                     }
                 },
                 headlineText = {
-                    SharedElement(tag = user to user.name, type = SharedElementType.FROM) {
+//                    SharedElement(tag = user to user.name, type = SharedElementType.FROM) {
                         Text(text = user.name)
-                    }
+//                    }
                 },
                 modifier = Modifier.clickable { onClickItem(user) },
             )
@@ -141,13 +141,13 @@ fun UserDetailsScreen(user: User,onClick: () -> Unit) {
                 )
             }
         }
-        SharedElement(
-            tag = user to user.name,
-            type = SharedElementType.TO,
-            modifier = Modifier
-        ) {
+//        SharedElement(
+//            tag = user to user.name,
+//            type = SharedElementType.TO,
+//            modifier = Modifier
+//        ) {
             Text(text = user.name, style = MaterialTheme.typography.titleMedium)
-        }
+//        }
     }
 }
 
