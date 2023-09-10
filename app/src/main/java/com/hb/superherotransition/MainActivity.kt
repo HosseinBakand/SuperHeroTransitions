@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,30 +34,17 @@ import com.hb.superhero.SharedElementType
 import com.hb.superhero.SharedElementsRoot
 import com.hb.superherotransition.ui.theme.SuperHeroTransitionTheme
 
-//import com.hb.superhero.SharedElementType
-//import com.hb.superhero.SharedElementsRoot
-
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            SuperHeroTransitionTheme {
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    Greeting("Android")
-//                }
-//            }
             val from = remember {
                 mutableStateOf(SharedElementType.FROM)
             }
             var screen: User? by remember {
                 mutableStateOf(null)
             }
-            MaterialTheme {
+            SuperHeroTransitionTheme {
                 SharedElementsRoot(from) {
                     if (screen == null) {
                         UsersListScreen(){
@@ -90,11 +78,6 @@ fun GreetingPreview() {
     }
 }
 
-//@Model
-//class ViewModel(var selectedUser: User? = null)
-//
-//val viewModel = ViewModel()
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UsersListScreen(onClickItem:(User)->Unit) {
@@ -103,7 +86,7 @@ fun UsersListScreen(onClickItem:(User)->Unit) {
             ListItem(
                 leadingContent = {
                     SharedElement(tag = user, type = SharedElementType.FROM) {
-                        Image(
+                        Image(modifier = Modifier.animateContentSize { initialValue, targetValue ->  },
                             painter = painterResource(id = user.avatar),
                             modifier = Modifier.size(48.dp),
                             contentScale = ContentScale.FillBounds,
