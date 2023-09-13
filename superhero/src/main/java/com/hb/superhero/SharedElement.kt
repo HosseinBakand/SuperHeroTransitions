@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hb.superhero.SharedElementTransition.InProgress
 import com.hb.superhero.SharedElementTransition.WaitingForEndElementPosition
+//import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
@@ -49,7 +50,7 @@ fun SharedElement(
 @Composable
 fun SharedElementsRoot(state: MutableState<SharedElementType>, children: @Composable () -> Unit) {
     val rootState = remember { SharedElementsRootState() }
-
+//    val uiState by rootState._uiState.collectAsStateWithLifecycle()
     Box(modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
         rootState.rootCoordinates = layoutCoordinates
     }) {
@@ -57,6 +58,8 @@ fun SharedElementsRoot(state: MutableState<SharedElementType>, children: @Compos
             children()
         }
         SharedElementTransitionsOverlay(rootState, state)
+
+//        Box(modifier = Modifier.size(rootState._uiState.value.))
     }
 }
 

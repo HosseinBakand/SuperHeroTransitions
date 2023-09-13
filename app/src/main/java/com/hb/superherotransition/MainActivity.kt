@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.hb.superhero.SharedElement
 import com.hb.superhero.SharedElementType
 import com.hb.superhero.SharedElementsRoot
+import com.hb.superhero.SharedElementsRootStateAmbient
+import com.hb.superhero.superHeroTransition
 import com.hb.superherotransition.ui.theme.SuperHeroTransitionTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,11 +49,11 @@ class MainActivity : ComponentActivity() {
             SuperHeroTransitionTheme {
                 SharedElementsRoot(from) {
                     if (screen == null) {
-                        UsersListScreen(){
+                        UsersListScreen() {
                             screen = it
                         }
                     } else {
-                        UserDetailsScreen(screen!!){
+                        UserDetailsScreen(screen!!) {
                             screen = null
                         }
                     }
@@ -80,23 +82,27 @@ fun GreetingPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsersListScreen(onClickItem:(User)->Unit) {
+fun UsersListScreen(onClickItem: (User) -> Unit) {
     LazyColumn() {
         items(users) { user ->
             ListItem(
                 leadingContent = {
-                    SharedElement(tag = user, type = SharedElementType.FROM) {
-                        Image(modifier = Modifier.animateContentSize { initialValue, targetValue ->  },
-                            painter = painterResource(id = user.avatar),
-                            modifier = Modifier.size(48.dp),
-                            contentScale = ContentScale.FillBounds,
-                            contentDescription = null
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = user.avatar),
+                        modifier = Modifier
+                            .size(48.dp)
+                            .superHeroTransition(
+                                tag = "user${user.avatar}", type = SharedElementType.FROM,
+                                rootState = SharedElementsRootStateAmbient.current
+                            ),
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = null
+                    )
+
                 },
                 headlineText = {
 //                    SharedElement(tag = user to user.name, type = SharedElementType.FROM) {
-                        Text(text = user.name)
+                    Text(text = user.name)
 //                    }
                 },
                 modifier = Modifier.clickable { onClickItem(user) },
@@ -106,7 +112,7 @@ fun UsersListScreen(onClickItem:(User)->Unit) {
 }
 
 @Composable
-fun UserDetailsScreen(user: User,onClick: () -> Unit) {
+fun UserDetailsScreen(user: User, onClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
         Box(
             modifier = Modifier
@@ -129,7 +135,7 @@ fun UserDetailsScreen(user: User,onClick: () -> Unit) {
 //            type = SharedElementType.TO,
 //            modifier = Modifier
 //        ) {
-            Text(text = user.name, style = MaterialTheme.typography.titleMedium)
+        Text(text = user.name, style = MaterialTheme.typography.titleMedium)
 //        }
     }
 }

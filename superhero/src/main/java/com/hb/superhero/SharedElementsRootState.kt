@@ -2,15 +2,22 @@ package com.hb.superhero
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.unit.IntSize
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SharedElementsRootState {
     private val choreographer = ChoreographerWrapper()
     val trackers = mutableMapOf<SharedElementTag, SharedElementsTracker>()
     var invalidateTransitionsOverlay: () -> Unit = {}
     var rootCoordinates: LayoutCoordinates? = null
+
+    val _uiState = MutableStateFlow<Pair<IntSize,Offset>?>(
+        null
+    )
 
     fun shouldHideElement(elementInfo: SharedElementInfo): Boolean {
         return getTracker(elementInfo).shouldHideElement
