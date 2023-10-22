@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +27,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hb.superhero.SharedElement
 import com.hb.superhero.SharedElementType
 import com.hb.superhero.SharedElementsRoot
 import com.hb.superhero.SharedElementsRootStateAmbient
@@ -40,14 +37,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val from = remember {
-                mutableStateOf(SharedElementType.FROM)
+            val INITIAL = remember {
+                mutableStateOf(SharedElementType.INITIAL)
             }
             var screen: User? by remember {
                 mutableStateOf(null)
             }
             SuperHeroTransitionTheme {
-                SharedElementsRoot(from) {
+                SharedElementsRoot(INITIAL) {
                     if (screen == null) {
                         UsersListScreen() {
                             screen = it
@@ -92,7 +89,7 @@ fun UsersListScreen(onClickItem: (User) -> Unit) {
                         modifier = Modifier
                             .size(48.dp)
                             .superHeroTransition(
-                                tag = "user${user.avatar}", type = SharedElementType.FROM,
+                                tag = "user${user.avatar}", type = SharedElementType.INITIAL,
                                 rootState = SharedElementsRootStateAmbient.current
                             ),
                         contentScale = ContentScale.FillBounds,
@@ -118,17 +115,19 @@ fun UserDetailsScreen(user: User, onClick: () -> Unit) {
             modifier = Modifier
                 .clickable { onClick() }
                 .size(200.dp)
+                .superHeroTransition(
+                    tag = "user${user.avatar}", type = SharedElementType.TARGET,
+                    rootState = SharedElementsRootStateAmbient.current
+                )
 
         ) {
-            SharedElement(tag = user, type = SharedElementType.TO) {
-
                 Image(
                     painter = painterResource(id = user.avatar),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.FillBounds,
                     contentDescription = null
                 )
-            }
+
         }
 //        SharedElement(
 //            tag = user to user.name,

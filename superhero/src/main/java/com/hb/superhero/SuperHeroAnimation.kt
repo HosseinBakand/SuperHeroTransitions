@@ -43,8 +43,12 @@ fun Modifier.superHeroTransition(
         properties["finishedListener"] = finishedListener
     }
 ) {
-    Log.e("TAGTAG", "$tag $type")
+//    Log.e("TAGTAG", "$tag $type")
+    val elementInfo = SharedElementInfo(tag, type)
 
+    rootState.onElementRegistered(elementInfo)
+
+    val hidden = remember { mutableStateOf(false) }
 
     // TODO: Listener could be a fun interface after 1.4
     val scope = rememberCoroutineScope()
@@ -60,10 +64,16 @@ fun Modifier.superHeroTransition(
 
             // global position (local also available)
             val positionInRootTopBar = it.positionInRoot()
-            Log.e("TAGTAG", "$size  $positionInRootTopBar")
+//            Log.e("TAGTAG", "$size  $positionInRootTopBar")
             scope.launch {
                 rootState._uiState.value = size to positionInRootTopBar
             }
+
+            rootState.onElementPositioned(
+                elementInfo = elementInfo,
+                coordinates = it,
+                hidden = hidden
+            )
         }
         .clipToBounds()
         .then(animModifier)

@@ -13,9 +13,9 @@ val SharedElementsRootStateAmbient = staticCompositionLocalOf<SharedElementsRoot
 }
 class PositionedSharedElement(
     val info: SharedElementInfo,
-    val placeholder: @Composable () -> Unit,
+//    val placeholder: @Composable () -> Unit,
     val bounds: Rect
 )
-enum class SharedElementType { FROM, TO }
+enum class SharedElementType { INITIAL, TARGET }
 
 data class SharedElementInfo(val tag: SharedElementTag, val type: SharedElementType)

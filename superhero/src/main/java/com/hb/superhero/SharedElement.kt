@@ -1,5 +1,6 @@
 package com.hb.superhero
 
+import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
@@ -36,7 +37,6 @@ fun SharedElement(
             .onGloballyPositioned { coordinates ->
                 rootState.onElementPositioned(
                     elementInfo = elementInfo,
-                    placeholder = placeholder ?: children,
                     coordinates = coordinates,
                     hidden = hidden
                 )
@@ -71,13 +71,15 @@ private fun SharedElementTransitionsOverlay(
     val label = "Hero"
 
     val transitionState = updateTransition(
-        targetState = if (state.value == SharedElementType.FROM) InProgress.State.START else InProgress.State.END,
+        targetState = if (state.value == SharedElementType.INITIAL) InProgress.State.START else InProgress.State.END,
         label = label
     )
+    Log.e("TAGTAG","SharedElementTransitionsOverlay")
+    LaunchedEffect(key1 = rootState.trackers){
 
-
-
+    }
     rootState.trackers.values.forEach { tracker ->
+        Log.e("TAGTAG","trackers $tracker")
         when (val transition = tracker.transition) {
             is WaitingForEndElementPosition -> SharedElementTransitionPlaceholder(
                 sharedElement = transition.startElement,
@@ -86,6 +88,7 @@ private fun SharedElementTransitionsOverlay(
             )
 
             is InProgress -> {
+                Log.e("TAGTAG","starrrrrrrrrrrrrrrrrrrrrrrrrt")
                 val offsetX by transitionState.animateDp(label = "OffsetX") { state ->
                     when (state) {
                         InProgress.State.START -> transition.startElementPropKeys.offsetX
@@ -127,7 +130,9 @@ private fun SharedElementTransitionsOverlay(
                 )
             }
 
-            null -> TODO()
+            null -> {
+//                TODO()
+            }
         }
     }
 }
@@ -174,7 +179,6 @@ private fun SharedElementTransitionPlaceholder(
                 alpha = alpha
             ),
     ) {
-        sharedElement.placeholder()
     }
 }
 

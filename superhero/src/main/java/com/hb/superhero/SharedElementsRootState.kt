@@ -1,5 +1,6 @@
 package com.hb.superhero
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.geometry.Offset
@@ -24,19 +25,19 @@ class SharedElementsRootState {
     }
 
     fun onElementRegistered(elementInfo: SharedElementInfo) {
+        Log.e("TAGTAG","onElementRegistered ${elementInfo.tag}  ${elementInfo.type}")
         choreographer.removeCallback(elementInfo)
         getTracker(elementInfo).onElementRegistered(elementInfo)
     }
 
     fun onElementPositioned(
         elementInfo: SharedElementInfo,
-        placeholder: @Composable () -> Unit,
         coordinates: LayoutCoordinates,
         hidden: MutableState<Boolean>
     ) {
+        Log.e("TAGTAG","onElementPositioned ${elementInfo.tag} ${elementInfo.type} ${coordinates.size}")
         val element = PositionedSharedElement(
             info = elementInfo,
-            placeholder = placeholder,
             bounds = calculateElementBoundsInRoot(coordinates)
         )
         getTracker(elementInfo).onElementPositioned(element, hidden)

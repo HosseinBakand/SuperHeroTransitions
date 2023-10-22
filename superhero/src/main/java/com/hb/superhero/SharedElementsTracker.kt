@@ -63,7 +63,9 @@ class SharedElementsTracker(
                 }
             }
 
-            State.Empty -> TODO()
+            State.Empty -> {
+//                todo
+            }
         }
     }
 
